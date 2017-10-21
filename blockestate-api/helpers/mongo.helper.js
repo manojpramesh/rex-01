@@ -1,17 +1,15 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const ObjectId = require('mongodb').ObjectID;
-const url = require('../config/mongo.config').url;
+const url = require('../config/mongo').url;
 
-var mongoUtil = {
+module.exports = {
 
     insertDocument: (data, collection, callback) => {
         MongoClient.connect(url, function(err, db) {
             assert.equal(null, err);
             db.collection(collection).insertOne(data, function(err, result) {
                 assert.equal(err, null);
-                console.log("document inserted at " + collection + "collection");
-                console.log(data);
                 db.close();
                 callback(result);
             });
@@ -24,9 +22,8 @@ var mongoUtil = {
             db.collection(collection).updateOne(condition, {
                 $set: data,
                 $currentDate: { "lastModified": true }
-            }, function(err, results) {
-                console.log(results);
-                callback();
+            }, function(err, result) {
+                callback(result);
             });
         });
     },
@@ -39,7 +36,6 @@ var mongoUtil = {
             cursor.each(function(err, doc) {
                 assert.equal(err, null);
                 if (doc != null) {
-                    console.dir(doc);
                     result.push(doc);
                 } else {
                     db.close();
@@ -53,13 +49,10 @@ var mongoUtil = {
         MongoClient.connect(url, function(err, db) {
             assert.equal(null, err);
             db.collection(collection).remove(field);
-            var result = "";
             assert.equal(err, null);
             db.close();
-            callback(result);
+            callback(true);
         });
     }
 
 };
-
-module.exports = mongoUtil;

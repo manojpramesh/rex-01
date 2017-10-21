@@ -1,27 +1,31 @@
 const express = require('express');
+const passport = require('passport');
+const userModel = require('../models/user.model');
 const router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
     res.json('Working!!');
 });
 
-router.post('/signUp', (req, res, next) => {
+router.post('/signUp', (req, res) => {
     let user = {
-        userName: req.body.userName,
-        password: req.body.password
-    }
-    req.login(req.body, () => {
-        res.redirect('/api/users/profile');
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        phone: req.body.phone
+    };
+    userModel.addUser(user, (result) => {
+        res.json(true);
     });
 });
 
-router.get('/profile', (req, res, next) => {
+router.post('/signIn', passport.authenticate('local'), (req, res) => {
     res.json(req.user);
 });
 
-router.post('/signIn', function(req, res, next) {
-    res.json('true');
+router.get('/profile', (req, res) => {
+    res.json(req.user);
 });
+
 
 module.exports = router;
