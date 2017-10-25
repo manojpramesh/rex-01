@@ -1,21 +1,25 @@
 {
-  "name": "blockestate-api",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
-  "dependencies": {
-    "body-parser": "~1.17.1",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.3",
-    "ejs": "~2.5.6",
-    "express": "~4.15.2",
-    "express-session": "^1.15.6",
-    "mongodb": "^2.2.31",
-    "morgan": "~1.8.1",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "serve-favicon": "~2.4.2"
-  }
+    "name": "blockestate-api",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node ./bin/www"
+    },
+    "dependencies": {
+        "body-parser": "~1.17.1",
+        "cookie-parser": "~1.4.3",
+        "debug": "~2.6.3",
+        "ejs": "~2.5.6",
+        "ethereumjs-tx": "^1.3.3",
+        "express": "~4.15.2",
+        "express-session": "^1.15.6",
+        "keythereum": "^1.0.2",
+        "mongodb": "^2.2.31",
+        "morgan": "~1.8.1",
+        "passport": "^0.4.0",
+        "passport-local": "^1.0.0",
+        "serve-favicon": "~2.4.2",
+        "solc": "^0.4.17",
+        "web3": "^0.19.1"
+    }
 }
