@@ -11,7 +11,7 @@ module.exports = {
             db.collection(collection).insertOne(data, function(err, result) {
                 assert.equal(err, null);
                 db.close();
-                callback(result);
+                callback(null, result);
             });
         });
     },
@@ -39,7 +39,7 @@ module.exports = {
                     result.push(doc);
                 } else {
                     db.close();
-                    callback(result);
+                    callback(null, result);
                 }
             });
         });
@@ -52,6 +52,17 @@ module.exports = {
             assert.equal(err, null);
             db.close();
             callback(true);
+        });
+    },
+
+    getDocumentCount: (collection, callback) => {
+        MongoClient.connect(url, function(err, db) {
+            assert.equal(null, err);
+            db.collection(collection).count({}, function(error, numOfDocs) {
+                assert.equal(err, null);
+                db.close();
+                callback(null, numOfDocs);
+            });
         });
     }
 

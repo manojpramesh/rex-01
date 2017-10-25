@@ -3,19 +3,23 @@ const mongoConfig = require('../config/mongo');
 
 module.exports = {
 
-    addProperty: () => {
-
+    addProperty: (data, cb) => {
+        mongoHelper.insertDocument(data, mongoConfig.propertyCollection, cb);
     },
 
-    editProperty: () => {
-
+    editProperty: (condition, data, cb) => {
+        mongoHelper.updateDocument(condition, data, mongoConfig.propertyCollection, cb);
     },
 
-    searchProperty: () => {
-
+    searchProperty: (field, cb) => {
+        mongoHelper.searchDocument(field, mongoConfig.propertyCollection, cb)
     },
 
-    deleteProperty: () => {
+    deleteProperty: (field, cb) => {
+        mongoHelper.deleteDocument(field, mongoConfig.propertyCollection, cb);
+    },
 
+    getNextId: (cb) => {
+        mongoHelper.getDocumentCount(mongoConfig.propertyCollection, cb);
     }
 }
