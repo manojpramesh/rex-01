@@ -17,13 +17,16 @@ module.exports = {
     },
 
     updateDocument: (condition, data, collection, callback) => {
+        if (data.lastModified != undefined) delete data.lastModified;
         MongoClient.connect(url, function(err, db) {
             assert.equal(null, err);
             db.collection(collection).updateOne(condition, {
                 $set: data,
                 $currentDate: { "lastModified": true }
             }, function(err, result) {
-                callback(result);
+                assert.equal(err, null);
+                db.close();
+                callback(null, result);
             });
         });
     },
