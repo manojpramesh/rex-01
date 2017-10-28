@@ -8,6 +8,7 @@ const session = require('express-session');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var property = require('./routes/property');
 
 var app = express();
 
@@ -26,8 +27,15 @@ app.use(session({ 'secret': 'blockestate-appsecret' }));
 
 require('./config/passport')(app);
 
+// app.all('', (req, res, next) => {
+//     if (!req.user)
+//         res.json(new Error('Unauthorized'))
+//     next();
+// });
+
 app.use('/', index);
 app.use('/api/users', users);
+app.use('/api/property', property);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
