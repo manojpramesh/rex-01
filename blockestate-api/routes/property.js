@@ -18,10 +18,20 @@ var upload = multer({
     storage: Storage
 }).array("files");
 
+
 // Get properties
 router.get('/getProperties', function(req, res, next) {
     if (req.query.id != undefined) req.query.id = parseInt(req.query.id);
+    if (req.query.bedrooms != undefined) req.query.bedrooms = parseInt(req.query.bedrooms);
+    if (req.query.price != undefined) req.query.price = parseInt(req.query.price);
+    if (req.query.baths != undefined) req.query.baths = parseInt(req.query.baths);
     propertyModel.searchProperty(req.query, (err, result) => {
+        res.json(result);
+    });
+});
+
+router.get('/getFeatured', function(req, res, next) {
+    propertyModel.getRandomProperties(parseInt(req.query.count) || 10, (err, result) => {
         res.json(result);
     });
 });

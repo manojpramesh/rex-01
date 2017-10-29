@@ -67,6 +67,40 @@ module.exports = {
                 callback(null, numOfDocs);
             });
         });
+    },
+
+    getRecentlyAdded: (count, collection, callback) => {
+        MongoClient.connect(url, function(err, db) {
+            assert.equal(null, err);
+            var cursor = db.collection(collection).find({}).sort({ $natural: 1 }).limit(count);
+            var result = [];
+            cursor.each(function(err, doc) {
+                if (doc != null) {
+                    result.push(doc);
+                } else {
+                    db.close();
+                    callback(err, result);
+                }
+            });
+        });
+    },
+
+    getRandomDocuments(count, collection, callback) {
+        MongoClient.connect(url, function(err, db) {
+            assert.equal(null, err);
+            var cursor = db.collection(collection).aggregate(
+                [{ $sample: { size: count } }]
+            );
+            var result = [];
+            cursor.each(function(err, doc) {
+                if (doc != null) {
+                    result.push(doc);
+                } else {
+                    db.close();
+                    callback(err, result);
+                }
+            });
+        });
     }
 
 };

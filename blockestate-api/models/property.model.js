@@ -21,5 +21,9 @@ module.exports = {
 
     getNextId: (cb) => {
         mongoHelper.getDocumentCount(mongoConfig.propertyCollection, cb);
+    },
+
+    getRandomProperties: (count, cb) => {
+        mongoHelper.getRandomDocuments(count, mongoConfig.propertyCollection, cb);
     }
 }
