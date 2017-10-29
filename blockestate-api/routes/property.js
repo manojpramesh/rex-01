@@ -1,7 +1,22 @@
 var express = require('express');
+var multer = require('multer');
+var fs = require('fs');
 var router = express.Router();
 var propertyModel = require('../models/property.model');
 var propertyContract = require('../ethereum/property.contract');
+
+var Storage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, "./uploads/" + req.folder);
+    },
+    filename: function(req, file, callback) {
+        callback(null, req.folder + "_" + file.originalname);
+    }
+});
+
+var upload = multer({
+    storage: Storage
+}).array("files");
 
 // Get properties
 router.get('/getProperties', function(req, res, next) {
@@ -20,12 +35,23 @@ router.get('/getProperty', function(req, res, next) {
 // Add a new property
 router.post('/addProperty', function(req, res, next) {
     propertyModel.getNextId((err, id) => {
-        let data = req.body;
-        data.id = id + 1000;
-        data.status = 'forsale';
-        data.txHash = propertyContract.addProperty([id, JSON.stringify(data)]);
-        propertyModel.addProperty(data, (err, result) => {
-            res.json(result);
+        if (err) res.send(new Error("Mongo error!"));
+        id += 1000;
+        req.folder = id || "general";
+        let dir = "./uploads/" + req.folder;
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+        upload(req, res, function(err) {
+            if (err) res.send(err.stack);
+            let data = req.body || {};
+            data.id = id;
+            data.status = 'forsale';
+            data.txHash = propertyContract.addProperty([id, JSON.stringify(data)]);
+            data.files = [];
+            for (let i = 0; i < req.files.length; i++)
+                data.files.push(req.files[i].path);
+            propertyModel.addProperty(data, (err, result) => {
+                res.json(data);
+            });
         });
     });
 });
