@@ -5,6 +5,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cors = require('cors');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -24,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ 'secret': 'blockestate-appsecret' }));
-
+app.use(cors);
 require('./config/passport')(app);
 
 // app.all('', (req, res, next) => {
