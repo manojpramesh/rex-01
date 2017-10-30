@@ -15,6 +15,10 @@ contract RealEstate {
         _;
     }
     
+    event propertyEvent(int _id, string _data, string _status, uint256 _time);
+    
+    // ADD, DELETE, EDIT
+    
     // constructor that saves owner details.
     function RealEstate() public {
         _owner = msg.sender;
@@ -23,16 +27,19 @@ contract RealEstate {
     // function to add property details
     function addProperty(int _id, string _data) onlyOwner public {
         properties[_id] = _data;
+        propertyEvent(_id, _data, "ADD", now);
     }
     
     // function to edit property details
     function editProperty(int _id, string _data) onlyOwner public {
         properties[_id] = _data;
+        propertyEvent(_id, _data, "EDIT", now);
     }
     
     // function to delete a certain property
     function deleteProperty(int _id) onlyOwner public {
         properties[_id] = "";
+        propertyEvent(_id, "", "DELETE", now);
     }
     
     // change the owner of the contract
