@@ -97,4 +97,11 @@ router.post('/deleteProperty', function(req, res, next) {
     res.json(result);
 });
 
+
+router.get('/getLogs', (req, res, next) => {
+    propertyContract.getEvents((err, result) => {
+        res.json(result);
+    });
+});
+
 module.exports = router;

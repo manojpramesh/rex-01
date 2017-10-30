@@ -35,5 +35,13 @@ module.exports = {
             config.RealEstate.abi,
             'deleteProperty',
             params)
+    },
+
+    getEvents: (cb) => {
+        ethereumHelper.getEvents(config.RealEstate.abi,
+            config.RealEstate.address,
+            config.accounts[0].address,
+            "propertyEvent",
+            cb);
     }
 }

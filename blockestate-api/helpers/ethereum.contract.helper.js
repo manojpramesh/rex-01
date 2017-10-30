@@ -87,5 +87,16 @@ module.exports = {
         let serializedTx = tx.serialize();
         let hash = web3.eth.sendRawTransaction("0x" + serializedTx.toString('hex'));
         return hash;
+    },
+
+    getEvents: (abi, contractAddress, fromAccount, eventName, cb) => {
+        let contract = web3.eth.contract(abi).at(contractAddress);
+
+        var event = contract[eventName]({ from: fromAccount }, {
+            fromBlock: 0,
+            toBlock: 'latest'
+        });
+
+        event.get(cb);
     }
 };
