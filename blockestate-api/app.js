@@ -38,6 +38,9 @@ require('./config/passport')(app);
 app.use('/', index);
 app.use('/api/users', users);
 app.use('/api/property', property);
+app.get('*', function(req, res) {
+    res.render('index', { title: 'Express' });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
