@@ -38,8 +38,13 @@ router.get('/getFeatured', function(req, res, next) {
 
 // Get details about a property
 router.get('/getProperty', function(req, res, next) {
-    var result = propertyContract.getProperty([req.query.id]);
-    res.json(JSON.parse(result));
+    var data = propertyContract.getProperty([req.query.id]);
+    console.log(data);
+    propertyModel.searchProperty({ 'id': parseInt(req.query.id) }, (err, result) => {
+        data = JSON.parse(data);
+        data.files = result[0].files;
+        res.json(data);
+    });
 });
 
 // Add a new property
@@ -55,12 +60,14 @@ router.post('/addProperty', function(req, res, next) {
             let data = req.body || {};
             data.id = id;
             data.status = 'forsale';
-            data.txHash = propertyContract.addProperty([id, JSON.stringify(data)]);
-            data.files = [];
-            for (let i = 0; i < req.files.length; i++)
-                data.files.push(req.files[i].path);
-            propertyModel.addProperty(data, (err, result) => {
-                res.json(data);
+            propertyContract.addProperty([id, JSON.stringify(data)], (err, tx) => {
+                data.txHash = tx;
+                data.files = [];
+                for (let i = 0; i < req.files.length; i++)
+                    data.files.push(req.files[i].path);
+                propertyModel.addProperty(data, (err, result) => {
+                    res.json(data);
+                });
             });
         });
     });

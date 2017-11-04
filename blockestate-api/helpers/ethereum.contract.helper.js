@@ -89,10 +89,20 @@ module.exports = {
         return hash;
     },
 
+    addProperty: (contractAddress, abi, functionName, params, cb) => {
+        web3.personal.unlockAccount(web3.eth.coinbase, Config.accounts[0].password, 15000);
+        let contract = web3.eth.contract(abi).at(contractAddress);
+        contract[functionName](params[0], params[1], {
+            from: web3.eth.coinbase,
+            value: 0,
+            gas: 2999844
+        }, cb);
+    },
+
     getEvents: (abi, contractAddress, fromAccount, eventName, cb) => {
         let contract = web3.eth.contract(abi).at(contractAddress);
 
-        var event = contract[eventName]({ from: fromAccount }, {
+        var event = contract[eventName]({ from: web3.eth.coinbase }, {
             fromBlock: 0,
             toBlock: 'latest'
         });
